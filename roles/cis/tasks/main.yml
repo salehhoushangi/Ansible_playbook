@@ -1,0 +1,20 @@
+---
+# tasks file for cis
+     
+     - name: Ansible copy cis1.sh(Hardening)  script
+       copy:
+          src: templates/cis1.sh
+          dest: /home/ansible/
+          force: yes
+          mode: a+x
+
+     - name: Execute  cis  script
+       shell: sed -i -e 's/\r$//' cis1.sh && sh /home/ansible/cis1.sh 
+   
+     - name: find the report of Hardeniong
+       shell: (cd /home/ansible; find RHEL7-8_Auditing_Report*)
+       register: files_to_copy
+
+     - name: Fetch the  (HARDENING) from remote nodes to local(ANSIBLE)
+       fetch: src=/home/ansible/{{ item }} dest=/home/ansible
+       with_items: "{{ files_to_copy.stdout_lines }}" 

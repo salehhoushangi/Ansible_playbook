@@ -1,0 +1,41 @@
+---
+# tasks file for report
+     - name: copy report script
+       template:
+             src: templates/report1.sh
+             dest: /home/ansible
+             owner: root
+             group: root
+             mode: a+x
+     #- name: ensure all template files are rendered
+     #  template:
+     #    src: '{{ item.src }}'
+     #    dest: '{{ item.dest }}' 
+     #    owner: root
+     #    group: root
+     #    mode: a+x 
+     #  loop:
+     #      - { src: 'templates/report1.sh', dest: '/home/ansible/report1.sh' }
+           #- { src: 'templates/cis1.sh', dest: '/home/ansible/cis1.sh' }  
+     
+    
+     #- name: copy cis script 
+     #  template:
+     #        src: templates/cis1.sh
+     #        dest: /home/ansible
+     #        owner: root
+     #        group: root
+     #        mode: a+x
+
+     - name: Execute  report  script
+       shell: sh /home/ansible/report1.sh | tee /home/ansible/hardening_report_$(hostname).txt
+ 
+     - name: find the output file 
+       shell: (cd /home/ansible; find hardening*) 
+       register: files_to_copy
+
+     - name: Fetch the  report (pre hardening)  from remote nodes to local(ANSIBLE) 
+       fetch: src=/home/ansible/{{ item }} dest=/home/ansible
+       with_items: "{{ files_to_copy.stdout_lines }}"   
+     #- name: Execute cis  script
+     #  command: sh /home/ansible/cis1.sh 

@@ -1,0 +1,9 @@
+---
+- name: use report role playbook
+  hosts: all
+  user: ansible
+  become: true
+
+  roles:
+    - role: report
+    - role: cis
