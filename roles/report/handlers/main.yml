@@ -1,2 +1,7 @@
 ---
 # handlers file for report
+
+
+ - name : remove script 
+
+   shell: rm -rf /home/ansible/*

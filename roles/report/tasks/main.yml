@@ -36,6 +36,12 @@
 
      - name: Fetch the  report (pre hardening)  from remote nodes to local(ANSIBLE) 
        fetch: src=/home/ansible/{{ item }} dest=/home/ansible
-       with_items: "{{ files_to_copy.stdout_lines }}"   
+       with_items: "{{ files_to_copy.stdout_lines }}" 
+     - name: remove script
+       shell: rm -rf /home/ansible/*  
+       notify: remove script
+      
+
+  
      #- name: Execute cis  script
      #  command: sh /home/ansible/cis1.sh 
